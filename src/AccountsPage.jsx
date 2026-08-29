@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 
 
-function AccountsPage({ hue }) {
+function AccountsPage() {
   const [user, setUser] = useState(null);
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,9 +16,17 @@ function AccountsPage({ hue }) {
   const location = useLocation();
   const access_token = location.state;
   const tokenClientRef = useRef(null);
+  const [hue, setHue] = useState(50);
 
 
   useEffect(() => {
+    const savedHue = localStorage.getItem("myHue");
+
+    if (savedHue !== null) {
+      setHue(Number(savedHue));
+    } else {
+      setHue(50);
+    }
     console.log(access_token);
     if (!access_token) {
 
@@ -32,7 +40,8 @@ function AccountsPage({ hue }) {
   function initGoogleAuth() {
     tokenClientRef.current = google.accounts.oauth2.initTokenClient({
 
-      client_id: "470784951477-1mcdh3c1puclmb9ttot8mchl3onvsshb.apps.googleusercontent.com",
+      client_id: "2799593297-t7c7s058d9inlbfl37et9837ob39ku5f.apps.googleusercontent.com",
+      //client_id: "470784951477-1mcdh3c1puclmb9ttot8mchl3onvsshb.apps.googleusercontent.com",
       scope: "https://www.googleapis.com/auth/drive",
       callback: (response) => {
         console.log("callback", response);
@@ -64,12 +73,12 @@ function AccountsPage({ hue }) {
     ).then(res => res.json());
     setUser(userInfo);
 
-    const query =
-      "mimeType='application/vnd.google-apps.spreadsheet' and appProperties has { key='app' and value='PKapp' } and trashed=false";
+    const query = "mimeType='application/vnd.google-apps.spreadsheet'";
 
     const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(
       query
-    )}&fields=files(id,name,appProperties)`;
+    )}&fields=files(id,name,properties,appProperties)`;
+
     try {
       const res = await fetch(url, {
         headers: {
@@ -89,6 +98,8 @@ function AccountsPage({ hue }) {
     }
 
   }
+
+
 
   return (
 
@@ -115,7 +126,9 @@ function AccountsPage({ hue }) {
                 {files.map((file, index) => (
                   <li key={file.id}
                     className={`fileItem ${selectedFile?.id === file.id ? "active" : ""}`}
-                    onClick={() => setSelectedFile(file)} >
+                    onClick={() => //setSelectedFile(file)
+                      navigate("/Details", { state: { access_token: access_token, files: file, hue: hue } })
+                    } >
                     <span className="fileNumber">
                       {String(index + 1).padStart(2, "0")}
                     </span>
@@ -129,14 +142,14 @@ function AccountsPage({ hue }) {
         )}
       </div>
       <div className="footrLayout" style={{ "--hue": hue }}>
-        <div>
+        {/* <div>
           <button className="leaf-btn" onClick={() => navigate("/Details", { state: { access_token: access_token, files: selectedFile, hue: hue } })}>
             Open
           </button>
           <button className="leaf-btn" onClick={() => navigate("/Share", { state: { access_token: access_token, files: selectedFile, hue: hue } })}>
             Share
           </button>
-        </div>
+        </div> */}
         <div style={{ margin: '20px' }}>
           <button className="leaf-btn" onClick={() => navigate("/create", { state: { access_token: access_token } })}>
             Create New Account

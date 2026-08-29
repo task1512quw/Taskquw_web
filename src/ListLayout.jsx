@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { list } from "./data";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const ListLayout = ({ layout }) => {
+const ListLayout = ({ template, layout }) => {
   const location = useLocation();
   const { access_token, files, hue } = location.state || {};
   const navigate = useNavigate();
@@ -60,11 +60,9 @@ const ListLayout = ({ layout }) => {
 
   useEffect(() => {
     if ((layout == "List") || (layout == "Check List")) {
-      let NewAccount = [];
-      while (NewAccount.length < 11) {
-        NewAccount.push("");
-      }
-      setItems(NewAccount);
+
+      setItems(list.values);
+
     } else {
       getSheetData();
     }
@@ -131,70 +129,70 @@ const ListLayout = ({ layout }) => {
     getSheetData();
 
   };
-const downloadPDF = () => {
-  if (fileName !== "") {
-  const doc = new jsPDF();
-  doc.text("Status", 10, 10);
-  doc.text("Item", 35, 10);
-  doc.text("Note", 100, 10);
+  const downloadPDF = () => {
+    if (fileName !== "") {
+      const doc = new jsPDF();
+      doc.text("Status", 10, 10);
+      doc.text("Item", 35, 10);
+      doc.text("Note", 100, 10);
 
 
-  let y = 20;
+      let y = 20;
 
-  items.forEach((item, index) => {
-    
-    doc.text(item.bool ? "Done" : "Pending", 10, y);
-    doc.text(item.text || "", 35, y);
-    doc.text(item.note || "", 100, y);
+      items.forEach((item, index) => {
 
-    y += 10;
+        doc.text(item.bool ? "Done" : "Pending", 10, y);
+        doc.text(item.text || "", 35, y);
+        doc.text(item.note || "", 100, y);
 
-    // New page if needed
-    if (y > 280) {
-      doc.addPage();
-      y = 20;
+        y += 10;
+
+        // New page if needed
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save(fileName + ".pdf");
+
+    } else {
+      alert("Please select a file first.");
     }
-  });
-
-  doc.save(fileName+".pdf");
-
-  } else {
-    alert("Please select a file first.");
-  }
-};
+  };
 
   const downloadCSV = () => {
-     if (fileName !== "") {
-    const header = ["Status,Text,Note"];
+    if (fileName !== "") {
+      const header = ["Status,Text,Note"];
 
-    const rows = items.map(
-      (item, index) =>
-        `"${item.bool ? "Done" : "Pending"}","${item.text}","${item.note}"`
-    );
+      const rows = items.map(
+        (item, index) =>
+          `"${item.bool ? "Done" : "Pending"}","${item.text}","${item.note}"`
+      );
 
-    const csvContent = [header, ...rows].join("\n");
+      const csvContent = [header, ...rows].join("\n");
 
-    const blob = new Blob([csvContent], {
-      type: "text/csv;charset=utf-8;",
-    });
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
 
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName+".csv";
-    link.click();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName + ".csv";
+      link.click();
     } else {
-    alert("Please select a file first.");
-  }
+      alert("Please select a file first.");
+    }
   };
 
 
   return (
     <div>
-
-      <div className="headerLayout" style={{ "--hue": hue }}>
-        <h3>{!files ? "" : ` ${files.name}`}</h3>
-      </div>
-
+      {template === undefined && (
+        <div className="headerLayout" style={{ "--hue": hue }}>
+          <h3>{!files ? "" : ` ${files.name}`}</h3>
+        </div>
+      )}
       <div className="bodyLayout" style={{ "--hue": hue }}>
         <div className="todo-paper">
           <div class="todo-body">
@@ -223,7 +221,7 @@ const downloadPDF = () => {
                       setOpenNoteIndex(openNoteIndex === index ? null : index)
                     }
                   >
-                    {item.note ===""?"📌":"📋"}
+                    {item.note === "" ? "📌" : "📋"}
                   </span>
 
                   <span

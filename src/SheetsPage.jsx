@@ -3,8 +3,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
 //import "./styles.css";
 
-const CLIENT_ID = "470784951477-1mcdh3c1puclmb9ttot8mchl3onvsshb.apps.googleusercontent.com";
-const API_KEY = "AIzaSyDfHDufNfyeUpX0BoI8uG5BVKiK1VbvNm8";
 
 function SheetsPage() {
   const [files, setFiles] = useState([]);

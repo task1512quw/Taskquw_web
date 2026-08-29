@@ -2,36 +2,13 @@ import { useEffect, useState } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate, useLocation } from "react-router-dom";
 import TreeView from "./TreeView";
+import { treeview } from "./data";
 
-const TreeLayout = ({ hue }) => {
+const TreeLayout = ({ template, hue }) => {
   const location = useLocation();
   const { access_token, files } = location.state || {};
   const navigate = useNavigate();
-  const [treeData, setTreeData] = useState([
-    {
-      id: 1,
-      name: "Parent 1",
-      children: [
-        {
-          id: 2,
-          name: "Child 1",
-          children: [
-            { id: 3, name: "Grandchild 1" }
-          ]
-        },
-        {
-          id: 4, name: "Child 2",
-          children: [
-            { id: 3, name: "Grandchild 2" }
-          ]
-        }
-      ]
-    },
-    {
-      id: 5,
-      name: "Parent 2"
-    }
-  ]);
+  const [treeData, setTreeData] = useState(treeview);
 
   const getSheetData = async () => {
     const res = await fetch(
@@ -94,16 +71,18 @@ const TreeLayout = ({ hue }) => {
 
   return (
     <div>
-      <div className="headerLayout" style={{ "--hue": hue }}>
-       {files && <h4>{files.name}</h4>}
-      </div>
+      {template === undefined && (
+        <div className="headerLayout" style={{ "--hue": hue }}>
+          {files && <h4>{files.name}</h4>}
+        </div>
+      )}
       <div className="bodyLayout" style={{ "--hue": hue }}>
         <TreeView data={treeData} />
 
-       
+
       </div>
-       <div className="footrLayout" style={{ "--hue": hue }}>
-        
+      <div className="footrLayout" style={{ "--hue": hue }}>
+
       </div>
     </div>
   );

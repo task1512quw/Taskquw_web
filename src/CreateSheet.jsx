@@ -1,19 +1,21 @@
 import { useGoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TV from "./TV";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListLayout from "./ListLayout";
 import TableLayout from "./TableLayout";
 import TreeLayout from "./TreeLayout";
+import { getThemeColors } from "./color";
 
 
-function CreateSheet({ hue }) {
+function CreateSheet() {
   const location = useLocation();
   const { access_token } = location.state || {};
   const [layout, setLayout] = useState("List");
   const [fileName, setFileName] = useState("");
   const layoutOptions = ["List", "Check List", "Table", "Tree"];
-
+  const [hue, setHue] = useState(50);
+  const { gradientLeafbtn, bgbodyColor, bgF1Color, bgF2Color, bgF3Color, bgF4Color, bgColor, gradientConfig, bglabelColor, oppositeColor, oppositeColor1, oppositeColor3, oppositeColor4 } = getThemeColors(hue);
   async function getOrCreateFile() {
     const query = `name='${fileName}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false`;
 
@@ -48,7 +50,7 @@ function CreateSheet({ hue }) {
         body: JSON.stringify({
           name: fileName,
           mimeType: "application/vnd.google-apps.spreadsheet",
-          appProperties: {
+          properties: {
             app: "PKapp",
             layout: layout
           }
@@ -59,10 +61,6 @@ function CreateSheet({ hue }) {
     const createData = await createRes.json();
     alert("File created:", createData.id);
   }
-
-  
-
-
 
   const [index, setIndex] = useState(0);
   const totalSlides = 4;
@@ -88,6 +86,14 @@ function CreateSheet({ hue }) {
     setLayout(layoutOptions[n])
   };
 
+  useEffect(() => {
+    const savedHue = localStorage.getItem("myHue");
+    if (savedHue !== null) {
+      setHue(Number(savedHue));
+    } else {
+      setHue(50);
+    }
+  }, []);
   return (
     <div>
       <div className="headerLayout" style={{ "--hue": hue }}>
@@ -106,26 +112,26 @@ function CreateSheet({ hue }) {
           >
 
             <div className="slide">
-              <div className="card">
-                <ListLayout layout="List" />
+              <div className="card" >
+                <ListLayout template="New" layout="" />
               </div>
             </div>
 
             <div className="slide">
               <div className="card">
-                <ListLayout layout="Check List" />
+                <ListLayout template="New" layout="Check List" />
               </div>
             </div>
 
             <div className="slide">
               <div className="card">
-                <TableLayout />
+                <TableLayout template="New" />
               </div>
             </div>
 
             <div className="slide">
               <div className="card">
-                <TreeLayout />
+                <TreeLayout template="New" />
               </div>
             </div>
 
@@ -150,7 +156,7 @@ function CreateSheet({ hue }) {
           ))}
 
         </div>
-       
+
       </div>
       <div className="footrLayout" style={{ "--hue": hue }}>
         <div className="inputBox">
