@@ -16,7 +16,7 @@ function SheetsPage() {
 
       // get user info
       const userInfo = await fetch(
-        "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + tokenResponse.access_token
+        "https://www.googleapis.com/oauth2/v1/userinfo?accessToken=" + tokenResponse.accessToken
       ).then(res => res.json());
 
       setUser(userInfo);
@@ -26,7 +26,7 @@ function SheetsPage() {
         "https://www.googleapis.com/drive/v3/files?q=mimeType='application/vnd.google-apps.spreadsheet' and name contains 'PKapp'&fields=files(id,name)",
         {
           headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
+            Authorization: `Bearer ${tokenResponse.accessToken}`,
           },
         }
       );

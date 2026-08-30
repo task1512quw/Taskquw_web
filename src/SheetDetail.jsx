@@ -16,7 +16,7 @@ function SheetDetail() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
+            Authorization: `Bearer ${tokenResponse.accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

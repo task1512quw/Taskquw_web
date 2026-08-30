@@ -5,18 +5,18 @@ import { useNavigate,useLocation } from "react-router-dom";
 const ListLayoutEdit = () => {
 
   const location = useLocation();
-  const { access_token, files, selectedId } = location.state || {};
+  const { accessToken, files, selectedId } = location.state || {};
   const navigate = useNavigate();
   const [fildName, setFildName] = useState("");
 
     useEffect(() => {
       
-  if (!access_token) {
-     alert("access_token Error")
+  if (!accessToken) {
+     alert("accessToken Error")
     return;
   }
 
-}, [access_token]);
+}, [accessToken]);
 
 
   async function Submit() {
@@ -29,7 +29,7 @@ const ListLayoutEdit = () => {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -44,7 +44,7 @@ const ListLayoutEdit = () => {
           {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${access_token}`,
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({

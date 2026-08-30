@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 function SharedSheet() {
   const location = useLocation();
-  const { access_token, files, hue } = location.state || {};
+  const { accessToken, files, hue } = location.state || {};
   console.log(files);
   const { id } = useParams();
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ function SharedSheet() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

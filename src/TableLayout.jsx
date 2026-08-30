@@ -6,7 +6,7 @@ import { getThemeColors } from "./color";
 
 const TableLayout = ({ template }) => {
   const location = useLocation();
-  const { access_token, files } = location.state || {};
+  const { accessToken, files } = location.state || {};
   const navigate = useNavigate();
   const [fileName, setFileName] = useState("");
   const [items, setItems] = useState(tableData);
@@ -19,7 +19,7 @@ const TableLayout = ({ template }) => {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -66,7 +66,7 @@ const TableLayout = ({ template }) => {
                       onClick={() =>
                         navigate("/TableLayoutEdit", {
                           state: {
-                            access_token,
+                            accessToken,
                             files,
                             selectedId: 1,
                           },
@@ -92,7 +92,7 @@ const TableLayout = ({ template }) => {
                         onClick={() =>
                           navigate("/TableLayoutEdit", {
                             state: {
-                              access_token,
+                              accessToken,
                               files,
                               selectedId: rowIndex + 2,
                             },
@@ -107,7 +107,7 @@ const TableLayout = ({ template }) => {
                         onClick={() =>
                           navigate("/TableLayoutEdit", {
                             state: {
-                              access_token,
+                              accessToken,
                               files,
                               selectedId: rowIndex + 2,
                             },
@@ -129,7 +129,7 @@ const TableLayout = ({ template }) => {
             onClick={() =>
               navigate("/TableLayoutEdit", {
                 state: {
-                  access_token,
+                  accessToken,
                   files,
                   selectedId: "0",
                 },

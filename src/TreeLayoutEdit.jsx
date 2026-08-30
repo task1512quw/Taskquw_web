@@ -5,20 +5,20 @@ import { useNavigate,useLocation } from "react-router-dom";
 const TreeLayoutEdit = () => {
 
   const location = useLocation();
-  const { access_token, files, selectedId } = location.state || {};
+  const { accessToken, files, selectedId } = location.state || {};
   const navigate = useNavigate();
   const [selectedRow, setSelectedRow] = useState([]);
 
     useEffect(() => {
       
-  if (!access_token) {
-     alert("access_token Error")
+  if (!accessToken) {
+     alert("accessToken Error")
     return;
   }else {
    GetValue();
   }
 
-}, [access_token]);
+}, [accessToken]);
 
 async function GetValue() {
 
@@ -30,7 +30,7 @@ async function GetValue() {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -49,7 +49,7 @@ async function GetValue() {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -66,7 +66,7 @@ async function GetValue() {
           {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${access_token}`,
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({

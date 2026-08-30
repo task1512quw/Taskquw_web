@@ -14,9 +14,9 @@ function LoginPage() {
     const login = useGoogleLogin({
       onSuccess: (res) => {
 
-        const access_token = res.access_token;
+        const accessToken = res.access_token;
 
-        navigate("/accounts",{ state: access_token });
+        navigate("/accounts",{ state: accessToken });
       },
       });
 

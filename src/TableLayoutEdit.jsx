@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate, useLocation } from "react-router-dom";
+import { getThemeColors } from "./color";
 
 const TableLayoutEdit = ({ hue }) => {
 
   const location = useLocation();
-  const { access_token, files, selectedId } = location.state || {};
+  const { accessToken, files, selectedId } = location.state || {};
   const navigate = useNavigate();
   const [fildName, setFildName] = useState("");
   const [formData, setFormData] = useState([]);
+  const { gradientLeafbtn, bgbodyColor, bgF1Color, bgF2Color, bgF3Color, bgF4Color, bgColor, gradientConfig, bglabelColor, oppositeColor, oppositeColor1, oppositeColor3, oppositeColor4 } = getThemeColors(hue);
 
   useEffect(() => {
 
-    if (!access_token) {
-      alert("access_token Error")
+    if (!accessToken) {
+      alert("accessToken Error")
       return;
     } else {
       GetValue();
     }
 
-  }, [access_token]);
+  }, [accessToken]);
 
 
   async function GetValue() {
@@ -31,7 +33,7 @@ const TableLayoutEdit = ({ hue }) => {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -63,7 +65,7 @@ const TableLayoutEdit = ({ hue }) => {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -82,7 +84,7 @@ const TableLayoutEdit = ({ hue }) => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -103,9 +105,9 @@ const TableLayoutEdit = ({ hue }) => {
 
   const AddColoum = () => {
     setFormData([
-    ...formData,
-    { value: "" }
-  ]);
+      ...formData,
+      { value: "" }
+    ]);
   };
 
   return (
@@ -117,7 +119,7 @@ const TableLayoutEdit = ({ hue }) => {
 
         {formData.map((item, index) => (
           <div className="inputBox">
-            <label style={{ fontWeight: "bold" }}>{selectedId == "1" ? "Name" : item.label}</label>
+            <label className="inputlabel" style={{ background: bglabelColor, }}>{selectedId == "1" ? "Name" : item.label}</label>
             <input
               type="text"
               value={item.value}
@@ -127,14 +129,16 @@ const TableLayoutEdit = ({ hue }) => {
         ))}
       </div>
       <div className="footrLayout" style={{ "--hue": hue }}>
-        {selectedId == "1" ? (
-          <button className="leaf-btn" onClick={() => AddColoum()}>
-            Add
+        <div className="inputBox">
+          {selectedId == "1" ? (
+            <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => AddColoum()}>
+              Add
+            </button>
+          ) : null}
+          <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => Submit()}>
+            Submit
           </button>
-        ) : null}
-        <button className="leaf-btn" onClick={() => Submit()}>
-          Submit
-        </button>
+        </div>
       </div>
     </div>
   );

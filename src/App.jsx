@@ -33,9 +33,9 @@ function App() {
             <Route path="/ListLayoutEdit" element={<ListLayoutEdit hue={hue} />} />
             <Route path="/TableLayoutEdit" element={<TableLayoutEdit hue={hue} />} />
             <Route path="/TreeLayoutEdit" element={<TreeLayoutEdit hue={hue} />} />
-            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/AboutUs" element={<AboutUs hue={hue} />} />
           </Routes>
-          <HeaderComp />
+          <HeaderComp hue={hue} setHue={setHue} />
         </HashRouter>
 
       </div>

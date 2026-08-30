@@ -4,16 +4,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { list } from "./data";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { getThemeColors } from "./color";
 
 const ListLayout = ({ template, layout }) => {
   const location = useLocation();
-  const { access_token, files, hue } = location.state || {};
+  const { accessToken, files, hue } = location.state || {};
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [fileName, setFileName] = useState("");
   const [openNoteIndex, setOpenNoteIndex] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const { gradientLeafbtn, bgbodyColor, bgF1Color, bgF2Color, bgF3Color, bgF4Color, bgColor, gradientConfig, bglabelColor, oppositeColor, oppositeColor1, oppositeColor3, oppositeColor4 } = getThemeColors(hue);
 
   const getSheetData = async () => {
     const res = await fetch(
@@ -21,7 +23,7 @@ const ListLayout = ({ template, layout }) => {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -59,10 +61,9 @@ const ListLayout = ({ template, layout }) => {
   };
 
   useEffect(() => {
-    if ((layout == "List") || (layout == "Check List")) {
 
+    if (template == "New") {
       setItems(list.values);
-
     } else {
       getSheetData();
     }
@@ -82,7 +83,7 @@ const ListLayout = ({ template, layout }) => {
       {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -106,7 +107,7 @@ const ListLayout = ({ template, layout }) => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -198,7 +199,7 @@ const ListLayout = ({ template, layout }) => {
           <div class="todo-body">
             {items.map((item, index) => (
               <div class="todo-line">
-                {((files?.appProperties?.layout === "Check List") || layout === "Check List") && (
+                {((files?.properties?.layout === "Check List") || layout === "Check List") && (
                   <input className="check-box" type="checkbox" checked={item.bool}
                     onChange={(e) =>
                       handleChange(
@@ -254,25 +255,30 @@ const ListLayout = ({ template, layout }) => {
           </div>
         </div>
       </div>
-      <div className="footrLayout" style={{ "--hue": hue }}>
-        <div className="inputBox">
-          <label>Name</label>
-          <input
-            type="text"
-            placeholder="Enter File name"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-          />
+      {template === undefined && (
+        <div className="footrLayout" style={{ "--hue": hue }}>
+          <div className="inputBox">
+            <label className="inputlabel" style={{ background: bglabelColor, }}>Name</label>
+            <input
+              type="text"
+              placeholder="Enter File name"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+            />
+          </div>
+          <div className="inputBox">
+            <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => downloadPDF()}>
+              Share
+            </button>
+            <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => downloadPDF()}>
+              Download PDF
+            </button>
+            <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => downloadCSV()}>
+              Download CSV
+            </button>
+          </div>
         </div>
-        <div className="inputBox">
-          <button className="leaf-btn" onClick={() => downloadPDF()}>
-            Download PDF
-          </button>
-          <button className="leaf-btn" onClick={() => downloadCSV()}>
-            Download CSV
-          </button>
-        </div>
-      </div>
+      )}
 
       {showDeletePopup && (
         <div className="modal">
@@ -287,8 +293,6 @@ const ListLayout = ({ template, layout }) => {
         </div>
       )}
     </div>
-
-
   );
 };
 

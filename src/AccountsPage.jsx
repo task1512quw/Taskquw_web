@@ -3,9 +3,10 @@ import { jwtDecode } from "jwt-decode";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
+import { getThemeColors } from "./color";
 
-
-function AccountsPage() {
+function AccountsPage({ hue }) {
+  //const [hue, setHue] = useState(50);
   const [user, setUser] = useState(null);
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -14,28 +15,27 @@ function AccountsPage() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const access_token = location.state;
+  const accessToken = location.state;
   const tokenClientRef = useRef(null);
-  const [hue, setHue] = useState(50);
 
+  const { gradientLeafbtn, bgbodyColor, bgF1Color, bgF2Color, bgF3Color, bgF4Color, bgColor, gradientConfig, bglabelColor, oppositeColor, oppositeColor1, oppositeColor3, oppositeColor4 } = getThemeColors(hue);
 
   useEffect(() => {
-    const savedHue = localStorage.getItem("myHue");
-
-    if (savedHue !== null) {
-      setHue(Number(savedHue));
-    } else {
-      setHue(50);
-    }
-    console.log(access_token);
-    if (!access_token) {
+    // const savedHue = localStorage.getItem("myHue");
+    // if (savedHue !== null) {
+    //   setHue(Number(savedHue));
+    // } else {
+    //   setHue(50);
+    // }
+    console.log(accessToken);
+    if (!accessToken) {
 
       navigate("/")
       return;
     }
 
     Account_details();
-  }, [access_token]);
+  }, [accessToken]);
 
   function initGoogleAuth() {
     tokenClientRef.current = google.accounts.oauth2.initTokenClient({
@@ -69,20 +69,20 @@ function AccountsPage() {
 
   async function Account_details() {
     const userInfo = await fetch(
-      "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token
+      "https://www.googleapis.com/oauth2/v1/userinfo?accessToken=" + accessToken
     ).then(res => res.json());
     setUser(userInfo);
 
-    const query = "mimeType='application/vnd.google-apps.spreadsheet'";
+    const query = "mimeType='application/vnd.google-apps.spreadsheet' and properties has { key='app' and value='PKapp' } and trashed=false";
 
     const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(
       query
-    )}&fields=files(id,name,properties,appProperties)`;
+    )}&fields=files(id,name,properties,properties)`;
 
     try {
       const res = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       if (!res.ok) {
@@ -99,11 +99,9 @@ function AccountsPage() {
 
   }
 
-
-
   return (
 
-    <div>
+    <>
       <div className="headerLayout" style={{ "--hue": hue }}>
         <h4>Account</h4>
 
@@ -127,7 +125,7 @@ function AccountsPage() {
                   <li key={file.id}
                     className={`fileItem ${selectedFile?.id === file.id ? "active" : ""}`}
                     onClick={() => //setSelectedFile(file)
-                      navigate("/Details", { state: { access_token: access_token, files: file, hue: hue } })
+                      navigate("/Details", { state: { accessToken: accessToken, files: file, hue: hue } })
                     } >
                     <span className="fileNumber">
                       {String(index + 1).padStart(2, "0")}
@@ -143,21 +141,21 @@ function AccountsPage() {
       </div>
       <div className="footrLayout" style={{ "--hue": hue }}>
         {/* <div>
-          <button className="leaf-btn" onClick={() => navigate("/Details", { state: { access_token: access_token, files: selectedFile, hue: hue } })}>
+          <button className="leaf-btn" onClick={() => navigate("/Details", { state: { accessToken: accessToken, files: selectedFile, hue: hue } })}>
             Open
           </button>
-          <button className="leaf-btn" onClick={() => navigate("/Share", { state: { access_token: access_token, files: selectedFile, hue: hue } })}>
+          <button className="leaf-btn" onClick={() => navigate("/Share", { state: { accessToken: accessToken, files: selectedFile, hue: hue } })}>
             Share
           </button>
         </div> */}
         <div style={{ margin: '20px' }}>
-          <button className="leaf-btn" onClick={() => navigate("/create", { state: { access_token: access_token } })}>
+          <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => navigate("/create", { state: { accessToken: accessToken } })}>
             Create New Account
           </button>
         </div>
       </div>
 
-    </div>
+    </>
   );
 }
 

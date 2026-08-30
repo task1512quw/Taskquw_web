@@ -17,19 +17,11 @@ export const getThemeColors = (hue: number) => {
     locations: [0, 0.5, 1] as const,
   };
 
-  const gradientLeafbtn: {
-    colors: readonly [string, string];
-    locations: readonly [number, number];
-    start: { x: number; y: number };
-    end: { x: number; y: number };
-  } = {
-    colors: [oppositeColor3, bgColor],
-    locations: [0, 1],
-
-    // Top → Bottom
-    start: { x: 0, y: 0 },
-    end: { x: 0, y: 1 },
-  };
+  const gradientLeafbtn = `linear-gradient(
+    180deg,
+    ${oppositeColor3} 0%,
+    ${bgColor} 100%
+  )`;
 
   return {
     bgbodyColor,
