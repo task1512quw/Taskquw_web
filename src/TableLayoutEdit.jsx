@@ -53,49 +53,76 @@ const TableLayoutEdit = ({ hue }) => {
 
     }
 
-
   }
 
   async function Submit() {
+    try {
 
-    if (selectedId != "0") {
-      const updatedRow = formData.map(item => item.value);
-      await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${files.id}/values/Sheet1!${selectedId}:${selectedId}?valueInputOption=RAW`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            range: `Sheet1!${selectedId}:${selectedId}`,
-            majorDimension: "ROWS",
-            values: [updatedRow],
-          }),
-        }
-      );
-    } else {
+      if (files?.selectedId !== "0") {
 
-      const newRow = formData.map(item => item.value);
+        const updatedRow =
+          formData.map(
+            item => item.value
+          );
 
-      await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${files.id}/values/Sheet1:append?valueInputOption=RAW`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            values: [newRow],
-          }),
-        }
-      );
+        if (!accessToken) return;
+        await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${files?.id}/values/Sheet1!${files?.selectedId}:${files.selectedId}?valueInputOption=RAW`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization:
+                `Bearer ${accessToken}`,
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              range:
+                `Sheet1!${files?.selectedId}:${files?.selectedId}`,
+              majorDimension:
+                "ROWS",
+              values: [
+                updatedRow
+              ],
+            }),
+          }
+        );
+
+      } else {
+
+        const newRow =
+          formData.map(
+            item => item.value
+          );
+
+        if (!accessToken) return;
+        await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${files?.id}/values/Sheet1:append?valueInputOption=RAW`,
+          {
+            method: "POST",
+            headers: {
+              Authorization:
+                `Bearer ${accessToken}`,
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              values: [newRow],
+            }),
+          }
+        );
+      }
+
+      alert("Success", "Data saved");
+
+      //navigation.goBack();
+      //router.replace({ pathname: "/tablelayout", files: { layout: files?.layout, id: files?.id, headtext: files?.name }, });
+
+    } catch (error) {
+      console.error("Error Submit", error)
     }
-
-
   }
+
 
   const handleChange = (index, newValue) => {
     const updated = [...formData];

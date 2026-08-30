@@ -23,10 +23,6 @@ export default function AppInfo() {
     return (
         <div className="aboutPage">
 
-            {/* Header */}
-
-
-            {/* Footer */}
             <div className="footerGradient" />
 
             <div

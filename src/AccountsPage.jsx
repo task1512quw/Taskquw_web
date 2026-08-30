@@ -103,8 +103,7 @@ function AccountsPage({ hue }) {
 
     <>
       <div className="headerLayout" style={{ "--hue": hue }}>
-        <h4>Account</h4>
-
+        <div className="account-title">Account</div>
       </div>
       <div className="bodyLayout" style={{ "--hue": hue }}>
         <div style={{ display: sheetaccess }}>
