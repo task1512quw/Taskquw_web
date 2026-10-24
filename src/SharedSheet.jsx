@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 function SharedSheet() {
   const location = useLocation();
   const { accessToken, files, hue } = location.state || {};
-  console.log(files);
+ 
   const { id } = useParams();
   const [email, setEmail] = useState("");
 

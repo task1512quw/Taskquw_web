@@ -36,7 +36,7 @@ async function GetValue() {
       );
       const data = await res.json();
       setSelectedRow(data.values[0]);
-      console.log(selectedRow)
+     
 
     } 
       

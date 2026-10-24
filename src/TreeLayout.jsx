@@ -65,7 +65,6 @@ const TreeLayout = ({ template, hue }) => {
 
     setTreeData(formattedTree);
 
-    console.log(formattedTree)
 
   };
 

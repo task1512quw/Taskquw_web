@@ -459,16 +459,15 @@ textarea,
   display: flex;
   align-items: center;
   gap: 10px;
-
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: 50px;
   color: white;
-  font-weight: 500;
-
   cursor: pointer;
   transition: transform 0.2s ease;
   width: stretch;
   background: #2c3e50;
+  width: 85%;
+  margin: 20px auto;
 }
 
 .fileItem:hover {
@@ -483,7 +482,10 @@ ul {
   padding: 0;
 }
 
-
+.arrowNext {
+  margin-left: auto;
+  font-size: 40px;
+}
 
 /* number circle */
 .fileNumber {
@@ -668,6 +670,7 @@ h4 {
   outline: none;
   resize: none;
   font-size: 14px;
+  color: #000;
 }
 
 input[type="text"] {
@@ -960,4 +963,37 @@ tbody tr:hover {
   line-height: 1.8;
   margin-bottom: 8px;
   text-align: left;
+}
+
+
+.inputlabel {
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 25%;
+  text-align: center;
+}
+
+.selectedButton {
+  background-color: #4285F4;
+}
+
+.roleButton {
+  width: 48%;
+  border: 1px solid #4285F4;
+  border-radius: 8px;
+  padding: 14px;
+  align-items: center;
+}
+
+.roleText {
+  color: #4285F4;
+  font-weight: 600;
+}
+
+.sharedUsers {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }

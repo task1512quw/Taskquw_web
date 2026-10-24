@@ -38,7 +38,7 @@ const TableLayoutEdit = ({ hue }) => {
         }
       );
       const data = await response1.json();   // 🔥 IMPORTANT
-      console.log("Sheet Data:", data);
+   
       const headers = data.valueRanges[0]?.values?.[0] || [];
       let row = [];
 

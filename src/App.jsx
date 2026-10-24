@@ -4,14 +4,15 @@ import Accounts from "./AccountsPage";
 import SheetsPage from "./SheetsPage";
 import CreateSheet from "./CreateSheet";
 import SheetDetail from "./SheetDetail";
-import SharedSheet from "./SharedSheet";
+import ShareFile from "./ShareFile";
 import Details from "./DetailsPage";
 import ListLayoutEdit from "./ListLayoutEdit";
 import TableLayoutEdit from "./TableLayoutEdit";
 import TreeLayoutEdit from "./TreeLayoutEdit";
 import { useState } from "react";
 import HeaderComp from "./headercomp";
-import AboutUs from "./AboutUs"
+import AboutUs from "./AboutUs";
+
 
 function App() {
   const [theme, setTheme] = useState("");
@@ -28,12 +29,13 @@ function App() {
             <Route path="/accounts" element={<Accounts hue={hue} />} />
             <Route path="/create" element={<CreateSheet hue={hue} />} />
             <Route path="/sheet/:id" element={<SheetDetail hue={hue} />} />
-            <Route path="/Share" element={<SharedSheet hue={hue} />} />
+            <Route path="/ShareFile" element={<ShareFile hue={hue} />} />
             <Route path="/Details" element={<Details hue={hue} />} />
             <Route path="/ListLayoutEdit" element={<ListLayoutEdit hue={hue} />} />
             <Route path="/TableLayoutEdit" element={<TableLayoutEdit hue={hue} />} />
             <Route path="/TreeLayoutEdit" element={<TreeLayoutEdit hue={hue} />} />
             <Route path="/AboutUs" element={<AboutUs hue={hue} />} />
+
           </Routes>
           <HeaderComp hue={hue} setHue={setHue} />
         </HashRouter>

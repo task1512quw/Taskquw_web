@@ -36,7 +36,7 @@ const ListLayout = ({ template, layout }) => {
       bool: row[2] === "TRUE" || row[2] === true,
     }));
 
-    while (updated.length < 10) {
+    while (updated.length < 12) {
       updated.push({
         text: "",
         note: "",
@@ -52,12 +52,19 @@ const ListLayout = ({ template, layout }) => {
 
   };
 
-  const handleChange = (index, field, value) => {
+  const handleChange = (index, field, value
+  ) => {
     const newItems = [...items];
-    newItems[index][field] = value;
-    setItems(newItems);
 
-    Submit(index, field, value);
+    newItems[index] = {
+      ...newItems[index],
+      [field]: value,
+    };
+
+    setItems(newItems);
+    if (field == "bool") {
+      Submit(index, field, value);
+    }
   };
 
   useEffect(() => {
@@ -77,7 +84,7 @@ const ListLayout = ({ template, layout }) => {
     };
 
     const col = colMap[field];
-    console.log(col)
+
     await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${files.id}/values/Sheet1!${col}${index + 2}?valueInputOption=USER_ENTERED`,
       {
@@ -191,7 +198,7 @@ const ListLayout = ({ template, layout }) => {
     <div>
       {template === undefined && (
         <div className="headerLayout" style={{ "--hue": hue }}>
-          <h3>{!files ? "" : ` ${files.name}`}</h3>
+          <div className="account-title">{!files ? "" : ` ${files.name}`}</div>
         </div>
       )}
       <div className="bodyLayout" style={{ "--hue": hue }}>
@@ -202,10 +209,7 @@ const ListLayout = ({ template, layout }) => {
                 {((files?.properties?.layout === "Check List") || layout === "Check List") && (
                   <input className="check-box" type="checkbox" checked={item.bool}
                     onChange={(e) =>
-                      handleChange(
-                        index,
-                        "bool",
-                        e.target.checked ? "TRUE" : "FALSE"
+                      handleChange(index, "bool", e.target.checked ? "TRUE" : "FALSE"
                       )
                     }
                   />
@@ -213,6 +217,7 @@ const ListLayout = ({ template, layout }) => {
 
                 <input className="line-space input-box" type="text" value={item.text}
                   onChange={(e) => handleChange(index, "text", e.target.value)}
+                  onBlur={() => Submit(index, "text", item.text)}
                 />
 
                 <div style={{ cursor: "pointer", display: "inline-block", position: "relative" }}
@@ -245,6 +250,9 @@ const ListLayout = ({ template, layout }) => {
                         onChange={(e) =>
                           handleChange(index, "note", e.target.value)
                         }
+                        onBlur={() =>
+                          Submit(index, "note", item.note)
+                        }
                       />
                     </div>
                   )}
@@ -267,7 +275,8 @@ const ListLayout = ({ template, layout }) => {
             />
           </div>
           <div className="inputBox">
-            <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => downloadPDF()}>
+            <button className="leaf-btn" style={{ background: gradientLeafbtn, }}
+              onClick={() => navigate("/ShareFile", { state: { accessToken: accessToken, files: files, hue: hue } })}>
               Share
             </button>
             <button className="leaf-btn" style={{ background: gradientLeafbtn, }} onClick={() => downloadPDF()}>

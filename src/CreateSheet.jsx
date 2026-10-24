@@ -174,8 +174,8 @@ function CreateSheet({ hue }) {
   return (
     <>
       <div className="headerLayout" style={{ "--hue": hue }}>
+        <div className="account-title">Choose Template</div>
 
-        <h4>Choose Template</h4>
       </div>
       <div className="bodyLayout" style={{ "--hue": hue }}>
 
